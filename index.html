@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>智聘适配校园 - 移动端原型图</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#7C3AED',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .status-bar {
+                height: 44px;
+                background-color: white;
+                border-bottom: 1px solid #E5E7EB;
+            }
+            .bottom-nav {
+                height: 56px;
+                background-color: white;
+                border-top: 1px solid #E5E7EB;
+            }
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                color: #6B7280;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .nav-item:hover {
+                transform: scale(1.05);
+            }
+            .card {
+                background-color: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                margin-bottom: 12px;
+            }
+            .btn {
+                height: 44px;
+                border-radius: 8px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .btn:hover {
+                transform: scale(1.02);
+            }
+            .btn:active {
+                transform: scale(0.98);
+            }
+            .btn-primary {
+                background-color: var(--primary-color, #4F46E5);
+                color: white;
+            }
+            .btn-secondary {
+                background-color: #F3F4F6;
+                color: #1F2937;
+            }
+            .page {
+                display: none;
+            }
+            .page.active {
+                display: block;
+                animation: fadeIn 0.4s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .hover-scale {
+                transition: all 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.02);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            }
+            .role-card {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .role-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            }
+            .message-item {
+                padding: 12px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .message-item:hover {
+                background-color: #F3F4F6;
+            }
+            .message-item.unread {
+                background-color: #F9FAFB;
+            }
+            .menu-item {
+                display: flex;
+                align-items: center;
+                padding: 14px 0;
+                border-bottom: 1px solid #E5E7EB;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .menu-item:hover {
+                background-color: #F9FAFB;
+                padding-left: 8px;
+            }
+            .stat-item {
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .stat-item:hover {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-md mx-auto bg-white min-h-screen relative">
+        <!-- 状态栏 -->
+        <div class="status-bar flex items-center justify-between px-4">
+            <div class="text-sm font-medium">9:41</div>
+            <div class="flex items-center space-x-1">
+                <i class="fa fa-signal"></i>
+                <i class="fa fa-wifi"></i>
+                <i class="fa fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 页面容器 -->
+        <div class="flex-1 overflow-y-auto" style="padding-bottom: 70px;">
+            <!-- ==================== 角色选择页面 ==================== -->
+            <div id="role-select-page" class="page active p-6">
+                <div class="text-center mb-10 pt-10">
+                    <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-handshake-o text-primary text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-dark mb-2">智聘适配校园</h1>
+                    <p class="text-gray-500">智能匹配 · 精准就业</p>
+                </div>
+                
+                <div class="mt-12">
+                    <h3 class="text-center text-gray-500 mb-6">请选择您的角色</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- 企业端卡片 -->
+                        <div class="role-card card p-6" onclick="selectRole('enterprise')">
+                            <div class="flex items-center">
+                                <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mr-4">
+                                    <i class="fa fa-building text-primary text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-lg text-dark">企业端</h3>
+                                    <p class="text-sm text-gray-500 mt-1">发布岗位 · 管理简历 · 查看匹配</p>
+                                </div>
+                                <i class="fa fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- 求职者端卡片 -->
+                        <div class="role-card card p-6" onclick="selectRole('jobseeker')">
+                            <div class="flex items-center">
+                                <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mr-4">
+                                    <i class="fa fa-user text-secondary text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-lg text-dark">求职者端</h3>
+                                    <p class="text-sm text-gray-500 mt-1">上传简历 · 查看匹配 · 投递岗位</p>
+                                </div>
+                                <i class="fa fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center text-sm text-gray-400">
+                    <p>登录即表示同意《用户协议》和《隐私政策》</p>
+                </div>
+            </div>
+
+            <!-- ==================== 企业端登录页面 ==================== -->
+            <div id="enterprise-login-page" class="page p-6">
+                <button class="text-gray-600 mb-4" onclick="goToRoleSelect()">
+                    <i class="fa fa-arrow-left mr-1"></i> 返回
+                </button>
+                
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-building text-primary text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark">企业登录</h2>
+                    <p class="text-gray-500 mt-1">欢迎回来发布招聘信息</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">企业账号</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="请输入企业账号">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                        <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="请输入密码">
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2"> 记住密码
+                        </label>
+                        <a href="#" class="text-primary">忘记密码？</a>
+                    </div>
+                    
+                    <button class="btn btn-primary w-full mt-6" onclick="login('enterprise')">登录</button>
+                    
+                    <div class="text-center mt-4">
+                        <span class="text-gray-500 text-sm">还没有账号？</span>
+                        <a href="#" class="text-primary text-sm ml-1">立即注册</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 求职者端登录页面 ==================== -->
+            <div id="jobseeker-login-page" class="page p-6">
+                <button class="text-gray-600 mb-4" onclick="goToRoleSelect()">
+                    <i class="fa fa-arrow-left mr-1"></i> 返回
+                </button>
+                
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-user text-secondary text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark">求职者登录</h2>
+                    <p class="text-gray-500 mt-1">开启您的求职之旅</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">个人账号</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入个人账号">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                        <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入密码">
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2"> 记住密码
+                        </label>
+                        <a href="#" class="text-secondary">忘记密码？</a>
+                    </div>
+                    
+                    <button class="btn btn-primary w-full mt-6" onclick="login('jobseeker')">登录</button>
+                    
+                    <div class="text-center mt-4">
+                        <span class="text-gray-500 text-sm">还没有账号？</span>
+                        <a href="#" class="text-secondary text-sm ml-1">立即注册</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 企业端首页 ==================== -->
+            <div id="enterprise-home-page" class="page">
+                <!-- 搜索栏 -->
+                <div class="bg-white border-b border-gray-200 px-4 py-3">
+                    <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+                        <i class="fa fa-search text-gray-400 mr-2"></i>
+                        <input type="text" placeholder="搜索岗位、简历" class="bg-transparent border-none outline-none text-sm flex-1">
+                    </div>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 欢迎信息 -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-dark">您好，腾讯科技</h2>
+                            <p class="text-sm text-gray-500">今天有新简历等您处理</p>
+                        </div>
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fa fa-building text-primary text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- 统计卡片 -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="card p-4 text-center stat-item" onclick="showPage('enterprise-resume-page')">
+                            <div class="text-2xl font-bold text-primary mb-1">12</div>
+                            <div class="text-xs text-gray-500">发布岗位</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item" onclick="showPage('enterprise-resume-page')">
+                            <div class="text-2xl font-bold text-success mb-1">35</div>
+                            <div class="text-xs text-gray-500">收到简历</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item" onclick="showPage('enterprise-resume-page')">
+                            <div class="text-2xl font-bold text-warning mb-1">8</div>
+                            <div class="text-xs text-gray-500">待处理</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 快捷操作 -->
+                    <div class="card p-4 mb-4">
+                        <h3 class="font-medium mb-3">快捷操作</h3>
+                        <div class="grid grid-cols-4 gap-3">
+                            <div class="text-center cursor-pointer" onclick="showPage('enterprise-post-job-page')">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-plus text-primary"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">发布岗位</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('enterprise-resume-page')">
+                                <div class="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-file-text text-success"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">管理简历</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('enterprise-match-page')">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-line-chart text-secondary"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">匹配分析</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('enterprise-message-page')">
+                                <div class="w-12 h-12 bg-warning/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-bell text-warning"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">消息通知</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 最近收到的简历 -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium">最近收到的简历</h3>
+                            <button class="text-primary text-sm" onclick="showPage('enterprise-resume-page')">查看全部</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="flex items-center">
+                                            <h4 class="font-medium">张三</h4>
+                                            <span class="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">匹配度85%</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 mt-1">计算机科学与技术 · 北京大学</p>
+                                        <p class="text-xs text-gray-400 mt-1">投递岗位：前端开发工程师 · 10分钟前</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <i class="fa fa-user text-gray-400"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="flex items-center">
+                                            <h4 class="font-medium">李四</h4>
+                                            <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">匹配度92%</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 mt-1">软件工程 · 清华大学</p>
+                                        <p class="text-xs text-gray-400 mt-1">投递岗位：后端开发工程师 · 30分钟前</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <i class="fa fa-user text-gray-400"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 发布岗位页面 ==================== -->
+            <div id="enterprise-post-job-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('enterprise-home-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">发布岗位</h2>
+                    <button class="text-primary font-medium">发布</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">岗位名称</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="例如：前端开发工程师">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">岗位类型</label>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>全职</option>
+                            <option>实习</option>
+                            <option>兼职</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">薪资范围</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="最低薪资">
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="最高薪资">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">工作地点</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="例如：北京市海淀区">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">学历要求</label>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>不限</option>
+                            <option>大专及以上</option>
+                            <option>本科及以上</option>
+                            <option>硕士及以上</option>
+                            <option>博士</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">岗位描述</label>
+                        <textarea class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" rows="4" placeholder="请详细描述岗位职责和要求..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">技能要求</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="例如：React, Vue, JavaScript">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 管理简历页面 ==================== -->
+            <div id="enterprise-resume-page" class="page">
+                <!-- 搜索栏 -->
+                <div class="bg-white border-b border-gray-200 px-4 py-3">
+                    <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+                        <i class="fa fa-search text-gray-400 mr-2"></i>
+                        <input type="text" placeholder="搜索简历" class="bg-transparent border-none outline-none text-sm flex-1">
+                    </div>
+                </div>
+                
+                <!-- 筛选标签 -->
+                <div class="px-4 py-3 flex space-x-2 overflow-x-auto">
+                    <button class="px-4 py-2 bg-primary text-white rounded-full text-sm whitespace-nowrap">全部 (35)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">待处理 (8)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">已查看 (15)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">已处理 (12)</button>
+                </div>
+                
+                <!-- 简历列表 -->
+                <div class="p-4 space-y-3">
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium">张三</h4>
+                                    <span class="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">匹配度85%</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-warning/10 text-warning text-xs rounded-full">待处理</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">计算机科学与技术 · 北京大学</p>
+                                <p class="text-xs text-gray-400 mt-1">投递岗位：前端开发工程师 · 10分钟前</p>
+                            </div>
+                            <button class="text-primary text-sm">查看</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium">李四</h4>
+                                    <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">匹配度92%</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-warning/10 text-warning text-xs rounded-full">待处理</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">软件工程 · 清华大学</p>
+                                <p class="text-xs text-gray-400 mt-1">投递岗位：后端开发工程师 · 30分钟前</p>
+                            </div>
+                            <button class="text-primary text-sm">查看</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium">王五</h4>
+                                    <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">匹配度78%</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">已查看</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">数据科学 · 浙江大学</p>
+                                <p class="text-xs text-gray-400 mt-1">投递岗位：数据分析师 · 2小时前</p>
+                            </div>
+                            <button class="text-primary text-sm">查看</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('enterprise-resume-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium">赵六</h4>
+                                    <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">匹配度88%</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">已处理</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">人工智能 · 上海交通大学</p>
+                                <p class="text-xs text-gray-400 mt-1">投递岗位：AI工程师 · 1天前</p>
+                            </div>
+                            <button class="text-primary text-sm">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 简历详情页面 ==================== -->
+            <div id="enterprise-resume-detail-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('enterprise-resume-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">简历详情</h2>
+                    <button class="text-primary">处理</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 基本信息 -->
+                    <div class="card p-4 mb-4">
+                        <div class="flex items-center mb-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                                <i class="fa fa-user text-gray-400 text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">张三</h3>
+                                <p class="text-sm text-gray-500">男 · 22岁 · 本科在读</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                                <i class="fa fa-star mr-1"></i>匹配度85%
+                            </span>
+                            <span class="px-3 py-1 bg-warning/10 text-warning text-sm rounded-full">
+                                <i class="fa fa-clock mr-1"></i>待处理
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- 联系方式 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">联系方式</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">手机</span>
+                                <span>138****1234</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">邮箱</span>
+                                <span>zhangsan@email.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 教育背景 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">教育背景</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between">
+                                    <span class="font-medium">北京大学</span>
+                                    <span class="text-sm text-gray-500">2020-2024</span>
+                                </div>
+                                <p class="text-sm text-gray-500">计算机科学与技术 · 本科</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 技能特长 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">技能特长</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">React</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">Vue</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">JavaScript</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">TypeScript</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">Node.js</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 实习经历 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">实习经历</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between">
+                                    <span class="font-medium">腾讯科技</span>
+                                    <span class="text-sm text-gray-500">2023.07-2023.09</span>
+                                </div>
+                                <p class="text-sm text-gray-500">前端开发实习生</p>
+                                <p class="text-sm text-gray-500 mt-1">负责小程序开发，参与用户界面优化项目</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div class="flex space-x-3 mt-6">
+                        <button class="btn btn-primary flex-1">邀请面试</button>
+                        <button class="btn btn-secondary flex-1">暂不合适</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 匹配分析页面 ==================== -->
+            <div id="enterprise-match-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('enterprise-home-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">匹配分析</h2>
+                    <button class="text-primary">筛选</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 匹配概览 -->
+                    <div class="card p-4 mb-4">
+                        <h3 class="font-medium mb-4">整体匹配概览</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">平均匹配度</span>
+                                    <span class="text-sm font-bold text-primary">82%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-primary h-3 rounded-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">技能匹配度</span>
+                                    <span class="text-sm font-bold text-success">88%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-success h-3 rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">学历匹配度</span>
+                                    <span class="text-sm font-bold text-secondary">95%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-secondary h-3 rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 高匹配简历 -->
+                    <div class="mb-4">
+                        <h3 class="font-medium mb-3">高匹配简历推荐</h3>
+                        <div class="space-y-3">
+                            <div class="card p-4 hover-scale cursor-pointer">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="flex items-center mb-1">
+                                            <h4 class="font-medium">李四</h4>
+                                            <span class="ml-2 px-2 py-0.5 bg-success/10 text-success text-xs rounded-full">匹配度92%</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500">软件工程 · 清华大学</p>
+                                    </div>
+                                    <button class="text-primary text-sm">查看</button>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-success h-2 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card p-4 hover-scale cursor-pointer">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="flex items-center mb-1">
+                                            <h4 class="font-medium">张三</h4>
+                                            <span class="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">匹配度85%</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500">计算机科学与技术 · 北京大学</p>
+                                    </div>
+                                    <button class="text-primary text-sm">查看</button>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 企业端消息页面 ==================== -->
+            <div id="enterprise-message-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <h2 class="font-medium text-lg">消息通知</h2>
+                    <button class="text-primary text-sm">全部已读</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <div class="space-y-2">
+                        <div class="message-item unread">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
+                                        <h4 class="font-medium">新简历投递</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1 ml-4">张三投递了前端开发工程师岗位</p>
+                                    <p class="text-xs text-gray-400 mt-1 ml-4">10分钟前</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item unread">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
+                                        <h4 class="font-medium">简历匹配提醒</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1 ml-4">发现3份与您岗位高度匹配的简历</p>
+                                    <p class="text-xs text-gray-400 mt-1 ml-4">1小时前</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-medium">岗位申请统计</h4>
+                                    <p class="text-sm text-gray-500 mt-1">本周收到15份简历，较上周增长20%</p>
+                                    <p class="text-xs text-gray-400 mt-1">昨天</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-medium">系统通知</h4>
+                                    <p class="text-sm text-gray-500 mt-1">您的岗位"前端开发工程师"已通过审核</p>
+                                    <p class="text-xs text-gray-400 mt-1">2天前</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 企业端个人中心 ==================== -->
+            <div id="enterprise-profile-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <h2 class="font-medium text-lg">企业中心</h2>
+                    <button class="text-primary">
+                        <i class="fa fa-cog text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 企业信息 -->
+                    <div class="card p-4 mb-4">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                <i class="fa fa-building text-primary text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">腾讯科技</h3>
+                                <p class="text-sm text-gray-500">已认证企业</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 统计 -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-primary">12</div>
+                            <div class="text-xs text-gray-500 mt-1">发布岗位</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-success">35</div>
+                            <div class="text-xs text-gray-500 mt-1">收到简历</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-warning">8</div>
+                            <div class="text-xs text-gray-500 mt-1">待处理</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 菜单 -->
+                    <div class="card">
+                        <div class="menu-item px-4">
+                            <i class="fa fa-building text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">企业信息</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4" onclick="showPage('enterprise-post-job-page')">
+                            <i class="fa fa-plus-circle text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">发布岗位</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4" onclick="showPage('enterprise-resume-page')">
+                            <i class="fa fa-file-text text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">简历管理</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4" onclick="showPage('enterprise-match-page')">
+                            <i class="fa fa-line-chart text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">数据统计</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-star text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">我的收藏</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-question-circle text-primary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">帮助中心</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary w-full mt-6" onclick="logout()">退出登录</button>
+                </div>
+            </div>
+
+            <!-- ==================== 求职者端首页 ==================== -->
+            <div id="jobseeker-home-page" class="page">
+                <!-- 搜索栏 -->
+                <div class="bg-white border-b border-gray-200 px-4 py-3">
+                    <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+                        <i class="fa fa-search text-gray-400 mr-2"></i>
+                        <input type="text" placeholder="搜索岗位、公司" class="bg-transparent border-none outline-none text-sm flex-1">
+                    </div>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 欢迎信息 -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-dark">您好，张三</h2>
+                            <p class="text-sm text-gray-500">找到心仪的工作了吗？</p>
+                        </div>
+                        <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                            <i class="fa fa-user text-secondary text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- 简历状态 -->
+                    <div class="card p-4 mb-4" onclick="showPage('jobseeker-upload-page')">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fa fa-file-text text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">我的简历</h3>
+                                    <p class="text-sm text-gray-500">已完成 · 上次更新：今天</p>
+                                </div>
+                            </div>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- 统计卡片 -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="card p-4 text-center stat-item" onclick="showPage('jobseeker-history-page')">
+                            <div class="text-2xl font-bold text-secondary mb-1">12</div>
+                            <div class="text-xs text-gray-500">投递记录</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-success mb-1">8</div>
+                            <div class="text-xs text-gray-500">收藏岗位</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-warning mb-1">3</div>
+                            <div class="text-xs text-gray-500">待处理</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 快捷操作 -->
+                    <div class="card p-4 mb-4">
+                        <h3 class="font-medium mb-3">快捷操作</h3>
+                        <div class="grid grid-cols-4 gap-3">
+                            <div class="text-center cursor-pointer" onclick="showPage('jobseeker-upload-page')">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-upload text-secondary"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">上传简历</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('jobseeker-match-page')">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-search text-primary"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">岗位匹配</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('jobseeker-history-page')">
+                                <div class="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-history text-success"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">投递记录</div>
+                            </div>
+                            <div class="text-center cursor-pointer" onclick="showPage('jobseeker-message-page')">
+                                <div class="w-12 h-12 bg-warning/10 rounded-full flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-bell text-warning"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">消息通知</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 推荐岗位 -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium">为你推荐</h3>
+                            <button class="text-secondary text-sm" onclick="showPage('jobseeker-match-page')">查看更多</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('jobseeker-job-detail-page')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium">前端开发工程师</h4>
+                                        <p class="text-sm text-gray-500 mt-1">腾讯科技 · 北京市海淀区</p>
+                                        <div class="flex items-center mt-2">
+                                            <span class="text-secondary font-medium mr-3">15K-25K</span>
+                                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full">匹配度85%</span>
+                                        </div>
+                                    </div>
+                                    <button class="text-secondary">
+                                        <i class="fa fa-heart text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('jobseeker-job-detail-page')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium">后端开发工程师</h4>
+                                        <p class="text-sm text-gray-500 mt-1">阿里巴巴 · 杭州市</p>
+                                        <div class="flex items-center mt-2">
+                                            <span class="text-secondary font-medium mr-3">18K-28K</span>
+                                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full">匹配度78%</span>
+                                        </div>
+                                    </div>
+                                    <button class="text-gray-400">
+                                        <i class="fa fa-heart-o text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 上传简历页面 ==================== -->
+            <div id="jobseeker-upload-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('jobseeker-home-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">上传简历</h2>
+                    <button class="text-secondary">保存</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 上传区域 -->
+                    <div class="card p-6 text-center mb-4">
+                        <div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fa fa-cloud-upload text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="font-medium mb-2">上传简历文件</h3>
+                        <p class="text-sm text-gray-500 mb-4">支持 PDF、Word 格式，文件大小不超过 5MB</p>
+                        <button class="btn btn-primary w-full">选择文件</button>
+                    </div>
+                    
+                    <!-- 简历信息 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入姓名" value="张三">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">学历</label>
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary">
+                                <option>本科在读</option>
+                                <option>硕士在读</option>
+                                <option>本科</option>
+                                <option>硕士</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">专业</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入专业" value="计算机科学与技术">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">毕业年份</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入毕业年份" value="2024">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 岗位匹配页面 ==================== -->
+            <div id="jobseeker-match-page" class="page">
+                <!-- 搜索栏 -->
+                <div class="bg-white border-b border-gray-200 px-4 py-3">
+                    <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+                        <i class="fa fa-search text-gray-400 mr-2"></i>
+                        <input type="text" placeholder="搜索岗位" class="bg-transparent border-none outline-none text-sm flex-1">
+                    </div>
+                </div>
+                
+                <!-- 筛选标签 -->
+                <div class="px-4 py-3 flex space-x-2 overflow-x-auto">
+                    <button class="px-4 py-2 bg-secondary text-white rounded-full text-sm whitespace-nowrap">推荐排序</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">最新发布</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">薪资最高</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">匹配度</button>
+                </div>
+                
+                <!-- 岗位列表 -->
+                <div class="p-4 space-y-3">
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('jobseeker-job-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">前端开发工程师</h4>
+                                <p class="text-sm text-gray-500 mt-1">腾讯科技 · 北京市海淀区</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-secondary font-medium mr-3">15K-25K</span>
+                                    <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full">匹配度85%</span>
+                                </div>
+                            </div>
+                            <button class="text-secondary">
+                                <i class="fa fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('jobseeker-job-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">后端开发工程师</h4>
+                                <p class="text-sm text-gray-500 mt-1">阿里巴巴 · 杭州市</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-secondary font-medium mr-3">18K-28K</span>
+                                    <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full">匹配度78%</span>
+                                </div>
+                            </div>
+                            <button class="text-gray-400">
+                                <i class="fa fa-heart-o text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 hover-scale cursor-pointer" onclick="showPage('jobseeker-job-detail-page')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">产品经理</h4>
+                                <p class="text-sm text-gray-500 mt-1">字节跳动 · 北京市海淀区</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-secondary font-medium mr-3">20K-35K</span>
+                                    <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-xs rounded-full">匹配度72%</span>
+                                </div>
+                            </div>
+                            <button class="text-gray-400">
+                                <i class="fa fa-heart-o text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 岗位详情页面 ==================== -->
+            <div id="jobseeker-job-detail-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('jobseeker-match-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">岗位详情</h2>
+                    <button class="text-secondary">
+                        <i class="fa fa-heart-o text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 岗位信息 -->
+                    <div class="card p-4 mb-4">
+                        <h3 class="text-xl font-bold mb-2">前端开发工程师</h3>
+                        <div class="flex items-center mb-3">
+                            <span class="text-secondary font-medium text-lg mr-3">15K-25K</span>
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-sm rounded-full">匹配度85%</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span><i class="fa fa-building mr-1"></i>腾讯科技</span>
+                            <span class="mx-2">|</span>
+                            <span><i class="fa fa-map-marker mr-1"></i>北京市海淀区</span>
+                            <span class="mx-2">|</span>
+                            <span><i class="fa fa-clock mr-1"></i>全职</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 岗位描述 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">岗位描述</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>1. 负责公司Web前端开发工作，参与产品需求分析和技术方案设计</li>
+                            <li>2. 优化前端性能，提升用户体验</li>
+                            <li>3. 与后端团队协作，实现前后端数据交互</li>
+                            <li>4. 持续学习新技术，提升技术能力</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 任职要求 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">任职要求</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 本科及以上学历，计算机相关专业</li>
+                            <li>• 熟悉HTML、CSS、JavaScript等前端技术</li>
+                            <li>• 熟悉React、Vue等前端框架</li>
+                            <li>• 具备良好的代码风格和团队协作能力</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 技能要求 -->
+                    <div class="card p-4 mb-4">
+                        <h4 class="font-medium mb-3">技能要求</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">React</span>
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Vue</span>
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">JavaScript</span>
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">TypeScript</span>
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Node.js</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 投递按钮 -->
+                    <button class="btn btn-primary w-full mt-6" onclick="applyJob()">投递简历</button>
+                </div>
+            </div>
+
+            <!-- ==================== 投递记录页面 ==================== -->
+            <div id="jobseeker-history-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <button class="text-gray-600" onclick="showPage('jobseeker-home-page')">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-medium text-lg">投递记录</h2>
+                    <button class="text-secondary">筛选</button>
+                </div>
+                
+                <!-- 筛选标签 -->
+                <div class="px-4 py-3 flex space-x-2 overflow-x-auto">
+                    <button class="px-4 py-2 bg-secondary text-white rounded-full text-sm whitespace-nowrap">全部 (12)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">待处理 (3)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">已查看 (5)</button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm whitespace-nowrap">已投递 (4)</button>
+                </div>
+                
+                <!-- 投递列表 -->
+                <div class="p-4 space-y-3">
+                    <div class="card p-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">前端开发工程师</h4>
+                                <p class="text-sm text-gray-500 mt-1">腾讯科技 · 北京市海淀区</p>
+                                <p class="text-xs text-gray-400 mt-1">投递时间：2024-06-15 10:30</p>
+                            </div>
+                            <span class="px-2 py-1 bg-success/10 text-success text-xs rounded-full">已查看</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">后端开发工程师</h4>
+                                <p class="text-sm text-gray-500 mt-1">阿里巴巴 · 杭州市</p>
+                                <p class="text-xs text-gray-400 mt-1">投递时间：2024-06-14 15:20</p>
+                            </div>
+                            <span class="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">待处理</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium">产品经理</h4>
+                                <p class="text-sm text-gray-500 mt-1">字节跳动 · 北京市海淀区</p>
+                                <p class="text-xs text-gray-400 mt-1">投递时间：2024-06-13 09:15</p>
+                            </div>
+                            <span class="px-2 py-1 bg-danger/10 text-danger text-xs rounded-full">已拒绝</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 求职者端消息页面 ==================== -->
+            <div id="jobseeker-message-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <h2 class="font-medium text-lg">消息通知</h2>
+                    <button class="text-secondary text-sm">全部已读</button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <div class="space-y-2">
+                        <div class="message-item unread">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-secondary rounded-full mr-2"></div>
+                                        <h4 class="font-medium">简历投递成功</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1 ml-4">您的简历已成功投递到腾讯科技</p>
+                                    <p class="text-xs text-gray-400 mt-1 ml-4">10分钟前</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item unread">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-secondary rounded-full mr-2"></div>
+                                        <h4 class="font-medium">简历被查看</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1 ml-4">您的简历已被阿里巴巴查看</p>
+                                    <p class="text-xs text-gray-400 mt-1 ml-4">1小时前</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-medium">岗位匹配通知</h4>
+                                    <p class="text-sm text-gray-500 mt-1">发现5个与您匹配的新岗位</p>
+                                    <p class="text-xs text-gray-400 mt-1">昨天</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-item">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-medium">面试邀请</h4>
+                                    <p class="text-sm text-gray-500 mt-1">字节跳动邀请您参加产品经理面试</p>
+                                    <p class="text-xs text-gray-400 mt-1">3天前</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 求职者端个人中心 ==================== -->
+            <div id="jobseeker-profile-page" class="page">
+                <!-- 标题栏 -->
+                <div class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+                    <h2 class="font-medium text-lg">个人中心</h2>
+                    <button class="text-secondary">
+                        <i class="fa fa-cog text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="p-4">
+                    <!-- 用户信息 -->
+                    <div class="card p-4 mb-4">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mr-4">
+                                <i class="fa fa-user text-secondary text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">张三</h3>
+                                <p class="text-sm text-gray-500">北京大学 · 计算机科学与技术</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 统计 -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="card p-4 text-center stat-item" onclick="showPage('jobseeker-history-page')">
+                            <div class="text-2xl font-bold text-secondary">12</div>
+                            <div class="text-xs text-gray-500 mt-1">投递记录</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-success">8</div>
+                            <div class="text-xs text-gray-500 mt-1">收藏岗位</div>
+                        </div>
+                        <div class="card p-4 text-center stat-item">
+                            <div class="text-2xl font-bold text-warning">3</div>
+                            <div class="text-xs text-gray-500 mt-1">待处理</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 菜单 -->
+                    <div class="card">
+                        <div class="menu-item px-4" onclick="showPage('jobseeker-upload-page')">
+                            <i class="fa fa-file-text text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">我的简历</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-heart text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">收藏岗位</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4" onclick="showPage('jobseeker-history-page')">
+                            <i class="fa fa-history text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">投递记录</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-eye text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">浏览历史</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-cog text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">账号设置</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="menu-item px-4">
+                            <i class="fa fa-question-circle text-secondary mr-3 w-5 text-center"></i>
+                            <span class="flex-1">帮助中心</span>
+                            <i class="fa fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary w-full mt-6" onclick="logout()">退出登录</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 底部导航栏 - 企业端 ==================== -->
+        <div id="enterprise-bottom-nav" class="bottom-nav fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-md w-full flex items-center justify-around" style="display: none;">
+            <div class="nav-item active" onclick="switchTab('enterprise', 'home')">
+                <i class="fa fa-home text-lg mb-1"></i>
+                <span>首页</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('enterprise', 'resume')">
+                <i class="fa fa-file-text text-lg mb-1"></i>
+                <span>简历</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('enterprise', 'message')">
+                <i class="fa fa-bell text-lg mb-1"></i>
+                <span>消息</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('enterprise', 'profile')">
+                <i class="fa fa-user text-lg mb-1"></i>
+                <span>我的</span>
+            </div>
+        </div>
+
+        <!-- ==================== 底部导航栏 - 求职者端 ==================== -->
+        <div id="jobseeker-bottom-nav" class="bottom-nav fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-md w-full flex items-center justify-around" style="display: none;">
+            <div class="nav-item active" onclick="switchTab('jobseeker', 'home')">
+                <i class="fa fa-home text-lg mb-1"></i>
+                <span>首页</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('jobseeker', 'match')">
+                <i class="fa fa-search text-lg mb-1"></i>
+                <span>岗位</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('jobseeker', 'message')">
+                <i class="fa fa-bell text-lg mb-1"></i>
+                <span>消息</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('jobseeker', 'profile')">
+                <i class="fa fa-user text-lg mb-1"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = '';
+        
+        function selectRole(role) {
+            currentRole = role;
+            if (role === 'enterprise') {
+                showPage('enterprise-login-page');
+            } else {
+                showPage('jobseeker-login-page');
+            }
+        }
+        
+        function goToRoleSelect() {
+            showPage('role-select-page');
+        }
+        
+        function login(role) {
+            currentRole = role;
+            if (role === 'enterprise') {
+                showPage('enterprise-home-page');
+                document.getElementById('enterprise-bottom-nav').style.display = 'flex';
+                document.getElementById('jobseeker-bottom-nav').style.display = 'none';
+            } else {
+                showPage('jobseeker-home-page');
+                document.getElementById('jobseeker-bottom-nav').style.display = 'flex';
+                document.getElementById('enterprise-bottom-nav').style.display = 'none';
+            }
+        }
+        
+        function logout() {
+            currentRole = '';
+            showPage('role-select-page');
+            document.getElementById('enterprise-bottom-nav').style.display = 'none';
+            document.getElementById('jobseeker-bottom-nav').style.display = 'none';
+        }
+        
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+        }
+        
+        function switchTab(role, tab) {
+            if (role === 'enterprise') {
+                const navItems = document.querySelectorAll('#enterprise-bottom-nav .nav-item');
+                navItems.forEach(item => item.classList.remove('active'));
+                
+                if (tab === 'home') {
+                    showPage('enterprise-home-page');
+                    navItems[0].classList.add('active');
+                } else if (tab === 'resume') {
+                    showPage('enterprise-resume-page');
+                    navItems[1].classList.add('active');
+                } else if (tab === 'message') {
+                    showPage('enterprise-message-page');
+                    navItems[2].classList.add('active');
+                } else if (tab === 'profile') {
+                    showPage('enterprise-profile-page');
+                    navItems[3].classList.add('active');
+                }
+            } else {
+                const navItems = document.querySelectorAll('#jobseeker-bottom-nav .nav-item');
+                navItems.forEach(item => item.classList.remove('active'));
+                
+                if (tab === 'home') {
+                    showPage('jobseeker-home-page');
+                    navItems[0].classList.add('active');
+                } else if (tab === 'match') {
+                    showPage('jobseeker-match-page');
+                    navItems[1].classList.add('active');
+                } else if (tab === 'message') {
+                    showPage('jobseeker-message-page');
+                    navItems[2].classList.add('active');
+                } else if (tab === 'profile') {
+                    showPage('jobseeker-profile-page');
+                    navItems[3].classList.add('active');
+                }
+            }
+        }
+        
+        function applyJob() {
+            alert('简历投递成功！');
+            showPage('jobseeker-history-page');
+        }
+    </script>
+</body>
+</html>
